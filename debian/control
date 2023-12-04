@@ -1,0 +1,18 @@
+#  SPDX-License-Identifier: GPL-2+
+#  Copyright (C) 2023, Advanced Micro Devices, Inc.
+
+Source: motor-control-iio-modules
+Section: kernel
+Priority: optional
+Maintainer: Vivekananda Dayananda<vivekananda.dayananda@amd.com>
+Build-Depends: debhelper-compat (= 13), dkms
+Standards-Version: 4.6.0
+Homepage: https://github.com/Xilinx/motor-control-iio-modules
+Rules-Requires-Root: binary-targets
+
+Package: motor-control-iio-modules
+Architecture: arm64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Motor Control IIO device drivers
+ This package contains IIO drivers for 'kd240 motor control application' and
+ uses DKMS to automatically build the kernel modules.
