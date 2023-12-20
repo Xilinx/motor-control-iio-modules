@@ -1,0 +1,25 @@
+#  SPDX-License-Identifier: GPL-2+
+#  Copyright (C) 2023, Advanced Micro Devices, Inc.
+
+PACKAGE_NAME="motor-control-iio-modules"
+PACKAGE_VERSION="0.1"
+AUTOINSTALL="yes"
+BUILT_MODULE_NAME[0]="xilinx-adc-hub"
+BUILT_MODULE_LOCATION[0]="."
+DEST_MODULE_LOCATION[0]="/updates/xilinx-adc-hub/"
+
+BUILT_MODULE_NAME[1]="hls-foc-periodic"
+BUILT_MODULE_LOCATION[1]="."
+DEST_MODULE_LOCATION[1]="/updates/hls-foc-periodic/"
+
+BUILT_MODULE_NAME[2]="hls-pwm-gen"
+BUILT_MODULE_LOCATION[2]="."
+DEST_MODULE_LOCATION[2]="/updates/hls-pwm-gen/"
+
+BUILT_MODULE_NAME[3]="hls-qei-axi"
+BUILT_MODULE_LOCATION[3]="."
+DEST_MODULE_LOCATION[3]="/updates/hls-qei-axi/"
+
+BUILT_MODULE_NAME[4]="hls-svpwm-duty"
+BUILT_MODULE_LOCATION[4]="."
+DEST_MODULE_LOCATION[4]="/updates/hls-svpwm-duty/"

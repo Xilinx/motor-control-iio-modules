@@ -1,0 +1,5 @@
+motor-control-iio-modules (0.1-0xlnx1) jammy; urgency=medium
+
+  * Initial release
+
+ -- Vivekananda Dayananda <vivekananda.dayananda@amd.com>  Mon, 04 Dec 2023 13:24:35 -0800
