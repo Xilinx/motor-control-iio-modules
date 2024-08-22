@@ -297,7 +297,7 @@ static int svpwm_buffer_enable(struct iio_dev *indio_dev)
 	struct private_data *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(svpwm_capture_thread, (void *)indio_dev,
+	task = kthread_run(svpwm_capture_thread, (void *)indio_dev,
 			      "%s", indio_dev->name);
 
 	if (IS_ERR(task))
@@ -375,7 +375,6 @@ static int svpwm_probe(struct platform_device *pdev)
 	svpwm_write_reg(data, SAMPLE_II_DATA, DEFAULT_II);
 	svpwm_write_reg(data, AP_CTRL, DEFAULT_AP_CTRL);
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &svpwm_setup_ops);
 	if (ret)
 		return ret;

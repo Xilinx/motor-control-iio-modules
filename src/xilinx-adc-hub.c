@@ -769,7 +769,7 @@ static int hub_buffer_enable(struct iio_dev *indio_dev)
 	struct hubdata *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(hub_capture_thread, (void *)indio_dev, "%s:%d",
+	task = kthread_run(hub_capture_thread, (void *)indio_dev, "%s:%d",
 			      indio_dev->name, iio_device_id(indio_dev));
 
 	if (IS_ERR(task))
@@ -950,7 +950,6 @@ static int adc_hub_probe(struct platform_device *pdev)
 		return ret;
 
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &hub_setup_ops);
 	if (ret)
 		return ret;

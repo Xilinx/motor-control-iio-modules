@@ -317,7 +317,7 @@ static int pwmgen_buffer_enable(struct iio_dev *indio_dev)
 	struct private_data *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(pwmgen_capture_thread, (void *)indio_dev,
+	task = kthread_run(pwmgen_capture_thread, (void *)indio_dev,
 			      "%s", indio_dev->name);
 
 	if (IS_ERR(task))
@@ -396,7 +396,6 @@ static int pwmgen_probe(struct platform_device *pdev)
 	pwmgen_write_reg(data, SAMPLE_II, DEFAULT_SAMPLE_II);
 	pwmgen_write_reg(data, AP_CTRL, DEFAULT_AP_CTRL);
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &pwmgen_setup_ops);
 	if (ret)
 		return ret;
