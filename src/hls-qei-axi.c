@@ -341,7 +341,7 @@ static int xqei_buffer_enable(struct iio_dev *indio_dev)
 	struct qei_data *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(xqei_capture_thread, (void *)indio_dev,
+	task = kthread_run(xqei_capture_thread, (void *)indio_dev,
 			      "%s", indio_dev->name);
 
 	if (IS_ERR(task))
@@ -411,7 +411,6 @@ static int xqei_probe(struct platform_device *pdev)
 	qei_write_reg(data, REG_CPR_I, DEFAULT_CPR);
 	qei_write_reg(data, AP_CTRL, DEFAULT_AP_CTRL);
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &xqei_setup_ops);
 	if (ret)
 		return ret;

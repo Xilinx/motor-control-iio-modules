@@ -886,7 +886,7 @@ static int foc_buffer_enable(struct iio_dev *indio_dev)
 	struct private_data *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(foc_capture_thread, (void *)indio_dev,
+	task = kthread_run(foc_capture_thread, (void *)indio_dev,
 			      "%s", indio_dev->name);
 
 	if (IS_ERR(task))
@@ -983,7 +983,6 @@ static int foc_probe(struct platform_device *pdev)
 	foc_write_reg(data, FW_KI_ARGS, DEFAULT_FW_KI_ARGS);
 	foc_write_reg(data, FIXED_ANGLE_ARGS, DEFAULT_FIXED_ANGLE);
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &foc_setup_ops);
 	if (ret)
 		return ret;

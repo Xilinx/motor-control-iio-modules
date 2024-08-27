@@ -769,7 +769,7 @@ static int hub_buffer_enable(struct iio_dev *indio_dev)
 	struct hubdata *st = iio_priv(indio_dev);
 	struct task_struct *task;
 
-	task = kthread_create(hub_capture_thread, (void *)indio_dev, "%s:%d",
+	task = kthread_run(hub_capture_thread, (void *)indio_dev, "%s:%d",
 			      indio_dev->name, iio_device_id(indio_dev));
 
 	if (IS_ERR(task))
@@ -804,9 +804,6 @@ static int
 hub_parse_child_nodes(struct iio_dev *indio_dev, struct platform_device *pdev)
 {
 	struct device_node *child_node = NULL, *np = pdev->dev.of_node;
-	static const struct iio_chan_spec time_channels[] = {
-		IIO_CHAN_SOFT_TIMESTAMP(16),
-	};
 	struct iio_chan_spec *hub_channels;
 
 	u32 chan_size = sizeof(struct iio_chan_spec);
@@ -821,7 +818,7 @@ hub_parse_child_nodes(struct iio_dev *indio_dev, struct platform_device *pdev)
 	if (ret < 0)
 		return ret;
 	hub_channels = devm_kzalloc(&pdev->dev,
-				    (chan_size * num_supply_chan + 1), GFP_KERNEL);
+				(chan_size * (num_supply_chan + 1)), GFP_KERNEL);
 
 	for_each_child_of_node(np, child_node) {
 		int index = num_supply_chan - 1 - i;
@@ -871,9 +868,15 @@ hub_parse_child_nodes(struct iio_dev *indio_dev, struct platform_device *pdev)
 		i++;
 	}
 
+	// soft time-stamp as last channel
+	hub_channels[num_supply_chan].type = IIO_TIMESTAMP;
+	hub_channels[num_supply_chan].channel = -1;
+	hub_channels[num_supply_chan].scan_index = num_supply_chan;
+	hub_channels[num_supply_chan].scan_type.sign = 's';
+	hub_channels[num_supply_chan].scan_type.realbits = 64;
+	hub_channels[num_supply_chan].scan_type.storagebits = 64;
+
 	indio_dev->num_channels = num_supply_chan + 1;
-	memcpy(hub_channels + num_supply_chan, time_channels,
-	       sizeof(time_channels));
 	indio_dev->channels = hub_channels;
 
 	return 0;
@@ -947,7 +950,6 @@ static int adc_hub_probe(struct platform_device *pdev)
 		return ret;
 
 	ret = devm_iio_kfifo_buffer_setup(&indio_dev->dev, indio_dev,
-					  INDIO_BUFFER_SOFTWARE,
 					  &hub_setup_ops);
 	if (ret)
 		return ret;
